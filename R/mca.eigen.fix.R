@@ -6,10 +6,10 @@ function(DATA,mca.results,make_data_nominal=TRUE,numVariables=NULL,correction=c(
 		orig.pdq_results <- mca.results$pdq
 		new.pdq_results <- mca.results$pdq	
 
-		M <- mca.results$M
-		masses <- diag(M)
-		W <- mca.results$W
-		weights <- diag(W)
+		masses <- mca.results$M
+		#masses <- diag(M)
+		weights <- mca.results$W
+		#weights <- diag(W)
 		if(make_data_nominal){
 			DATA <- makeNominalData(DATA)
 		}
@@ -43,19 +43,22 @@ function(DATA,mca.results,make_data_nominal=TRUE,numVariables=NULL,correction=c(
 		di <- as.matrix(di)
 
 		#Columns, G
-		fj <- W %*% new.pdq_results$q %*% new.pdq_results$Dd
+		#fj <- W %*% new.pdq_results$q %*% new.pdq_results$Dd
+		fj <- repmat(weights,1,new.pdq_results$ng) * new.pdq_results$q %*% new.pdq_results$Dd
 		rownames(fj) <- rownames(mca.results$fj)
+		cj <- repmat(rowCenter,1,new.pdq_results$ng) * (fj^2)/repmat(t(new.pdq_results$Dv^2),nrow(mca.results$fj),1)
+		if(!symmetric){
+			#fj <- W %*% new.pdq_results$q
+			fj <- repmat(weights,1,new.pdq_results$ng) * new.pdq_results$q
+			rownames(fj) <- rownames(mca.results$fj)
+		}
 		dj <- rowSums(fj^2)
 		rj <- repmat((1/dj),1,new.pdq_results$ng) * (fj^2)
-		rj <- replace(rj,is.nan(rj),0)	
-		cj <- repmat(rowCenter,1,new.pdq_results$ng) * (fj^2)/repmat(t(new.pdq_results$Dv^2),nrow(mca.results$fj),1)
-		dj <- as.matrix(dj)
-		if(!symmetric){
-			fj <- W %*% new.pdq_results$q
-			rownames(fj) <- rownames(mca.results$fj)
-		}	
+		rj <- replace(rj,is.nan(rj),0)
+		dj <- as.matrix(dj)				
 
-		res <- list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=new.pdq_results$Dv^2,M=M,W=W,pdq=new.pdq_results,pdq.uncor= orig.pdq_results,X=mca.results$X,hellinger=mca.results$hellinger)
+		#res <- list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=new.pdq_results$Dv^2,M=M,W=W,pdq=new.pdq_results,pdq.uncor= orig.pdq_results,X=mca.results$X,hellinger=mca.results$hellinger)
+		res <- list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=new.pdq_results$Dv^2,M=masses,W=weights,pdq=new.pdq_results,pdq.uncor= orig.pdq_results,X=mca.results$X,hellinger=mca.results$hellinger)
 		class(res) <- c("epMCA","list")
 		return(res)
 	}

@@ -3,6 +3,7 @@ function(DATA,masses=NULL,weights=NULL){
 	diagmats <- TRUE
 	DATA_dimensions <- dim(DATA)
 	
+	#I could just get rid of this and always use the vector versions.
 	if((DATA_dimensions[1] > 1000) || (DATA_dimensions[2] > 1000)){
 		#use the vector approach to masses & weights.
 		diagmats <- FALSE

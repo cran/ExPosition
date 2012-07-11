@@ -8,13 +8,15 @@ function(DATA,masses=NULL,weights=NULL,hellinger=FALSE,symmetric=TRUE,k=0){
 	rowProfiles <- mRP$rowProfiles
 	deviations <- mRP$deviations
 	masses <- mRP$masses
-	M <- diag(masses)
+	#M <- mRP$masses
+	#M <- diag(masses)
 	weights <- mRP$weights
-	W <- mRP$W	
+	#W <- mRP$weights
+	#W <- mRP$W	
 
 	X <- deviations
 		
-	pdq_results <- genPDQ(M=M,deviations,W=W,k=k)
+	pdq_results <- genPDQ(M=masses,deviations,W=weights,k=k)
 	taus = (pdq_results$Dv^2/sum(pdq_results$Dv^2))*100
 	
 	#Rows, F
@@ -27,11 +29,9 @@ function(DATA,masses=NULL,weights=NULL,hellinger=FALSE,symmetric=TRUE,k=0){
 	di = as.matrix(di)
 
 	#Columns, G
-	fj = W %*% pdq_results$q %*% pdq_results$Dd	
-	rownames(fj) <- colnames(DATA)	
-	dj = rowSums(fj^2)
-	rj = repmat((1/dj),1,pdq_results$ng) * (fj^2)
-	rj<-replace(rj,is.nan(rj),0)		
+	#fj = W %*% pdq_results$q %*% pdq_results$Dd
+	fj = repmat(weights,1,pdq_results$ng) * pdq_results$q %*% pdq_results$Dd	
+	rownames(fj) <- colnames(DATA)		
 	if(hellinger){
 		#  cj=(fj.^2)./repmat(sum(fj.^2),J,1);
 		#colSums(fj^2)
@@ -44,11 +44,15 @@ function(DATA,masses=NULL,weights=NULL,hellinger=FALSE,symmetric=TRUE,k=0){
 	}else{	
 		cj = repmat(rowCenter,1,pdq_results$ng) * (fj^2)/repmat(t(pdq_results$Dv^2),DATA_dimensions[2],1)
 	}
-	dj = as.matrix(dj)
 	if(!symmetric){
-		fj = W %*% pdq_results$q
+		#fj = W %*% pdq_results$q
+		fj <- repmat(weights,1,pdq_results$ng) * pdq_results$q
 		rownames(fj) <- colnames(DATA)		
-	}		
+	}
+	dj <- rowSums(fj^2)
+	rj <- repmat((1/dj),1,pdq_results$ng) * (fj^2)
+	rj <- replace(rj,is.nan(rj),0)
+	dj <- as.matrix(dj)			
 	
-	return(list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=pdq_results$Dv^2,M=M,W=W,pdq=pdq_results,X=X,hellinger=hellinger))
+	return(list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=pdq_results$Dv^2,M=masses,W=weights,pdq=pdq_results,X=X,hellinger=hellinger))
 }
