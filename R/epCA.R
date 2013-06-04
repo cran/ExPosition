@@ -6,13 +6,7 @@ function(DATA,DESIGN=NULL,make_design_nominal=TRUE,masses=NULL,weights=NULL,hell
 	
 	res <- coreCA(DATA,masses=masses,weights=weights,hellinger=hellinger,symmetric=symmetric,k=k)
 	class(res) <- c("epCA","list")
-	
-	epPlotInfo <- NULL	
-	#graphing handled here; also design
-	if(graphs){
 		
-		epPlotInfo <- epGraphHandler(res,DATA,DESIGN,main)		
-	}
-
+	epPlotInfo <- epGraphs(res=res,DESIGN=DESIGN,main=main,graphs=graphs)
 	return(epOutputHandler(res=res,epPlotInfo=epPlotInfo))
 }

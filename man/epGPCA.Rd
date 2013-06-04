@@ -7,12 +7,13 @@ epGPCA: Generalized Principal Components Analysis (GPCA) via ExPosition.
 Generalized Principal Components Analysis (GPCA) via ExPosition.
 }
 \usage{
-epGPCA(DATA, scaleFlag = TRUE, centerFlag = TRUE, DESIGN = NULL, make_design_nominal = TRUE, masses = NULL, weights = NULL, graphs = TRUE, k = 0)
+epGPCA(DATA, scale = TRUE, center = TRUE, DESIGN = NULL, make_design_nominal = TRUE, 
+	masses = NULL, weights = NULL, graphs = TRUE, k = 0)
 }
 \arguments{
   \item{DATA}{original data to perform a PCA on.}
-  \item{scaleFlag}{a boolean. If TRUE (default) the data will be scaled (z-scored) per column.}
-  \item{centerFlag}{a boolean. If TRUE (default) the data will be centered at 0 per column.}
+  \item{scale}{a boolean, vector, or string. See \code{\link{expo.scale}} for details.}
+  \item{center}{a boolean, vector, or string. See \code{\link{expo.scale}} for details.}
   \item{DESIGN}{a design matrix to indicate if rows belong to groups.}
   \item{make_design_nominal}{a boolean. If TRUE (default), DESIGN is a vector that indicates groups (and will be dummy-coded). If FALSE, DESIGN is a dummy-coded matrix.}
   \item{masses}{a diagonal matrix or column-vector of masses for the row items.}
@@ -43,7 +44,5 @@ Derek Beaton
 	#this is for ExPosition's iris data
 	data(ep.iris)
 	gpca.iris.res <- epGPCA(ep.iris$data,DESIGN=ep.iris$design,make_design_nominal=FALSE)
-	#this will overwrite the data in gpca.iris.res$Plotting.Data
-	gpca.iris.res$Plotting.Data <- epGraphs(gpca.iris.res$ExPosition.Data,epPlotInfo=gpca.iris.res$Plotting.Data,x_axis=2,y_axis=3)	
 }
 \keyword{ multivariate }

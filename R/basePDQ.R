@@ -1,5 +1,5 @@
 basePDQ <-
-function(datain,k=0,genFlag=FALSE,vectorflag=FALSE,M=NULL,W=NULL){
+function(datain,genFlag=FALSE,vectorflag=FALSE,M=NULL,W=NULL,is.mds=FALSE,decomp.approach='svd',k=0){
 
 	#check if M & W are OK
 	if(is.null(M) || is.null(W)){
@@ -20,22 +20,14 @@ function(datain,k=0,genFlag=FALSE,vectorflag=FALSE,M=NULL,W=NULL){
 	}
 
 	#shipping off the call!	
-	svdOUT <- pickSVD(datain)
+	svdOUT <- pickSVD(datain,is.mds=is.mds,decomp.approach=decomp.approach,k=k)
 	
 	#now get data into PDQ
 	P <- svdOUT$u
 	d <- as.vector(svdOUT$d)	
-	Q <- svdOUT$v		
-	
-	#check k
-	if(k < 1){
-		k <- length(d)
-	}
-	
-	#find precision limit, fix what comes back.
-	precisionLimit <- 2*.Machine$double.eps		
-	indToKeep <- which(d^2 > precisionLimit)
-	indToKeep <- indToKeep[1:min(c(length(indToKeep),k))]
+	D <- diag(d)
+	Q <- svdOUT$v
+	tau <- svdOUT$tau
 	
 	#if GSVD, correct data.
 	if(genFlag){
@@ -48,13 +40,7 @@ function(datain,k=0,genFlag=FALSE,vectorflag=FALSE,M=NULL,W=NULL){
 		}
 	}
 	
-	#send it all home!
-	d <- d[indToKeep]	
-	D <- diag(d)	
-	P <- P[,indToKeep]
-	Q <- Q[,indToKeep]
-	
-	res <- list(p=P,q=Q,Dv=d,Dd=D,ng=length(d))
+	res <- list(p=P,q=Q,Dv=d,Dd=D,ng=length(d),tau=tau)
 	class(res) <- c("epSVD","list")	
 	return(res)
 }

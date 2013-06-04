@@ -8,7 +8,8 @@ coreCA
 coreCA performs the core of correspondence analysis (CA), multiple correspondence analysis (MCA) and related techniques.
 }
 \usage{
-coreCA(DATA, masses = NULL, weights = NULL, hellinger = FALSE, symmetric = TRUE, k = 0)
+coreCA(DATA, masses = NULL, weights = NULL, hellinger = FALSE, symmetric = TRUE, 
+decomp.approach = 'svd', k = 0)
 }
 \arguments{
   \item{DATA}{original data to decompose and analyze via the singular value decomposition.}
@@ -16,6 +17,7 @@ coreCA(DATA, masses = NULL, weights = NULL, hellinger = FALSE, symmetric = TRUE,
   \item{weights}{a vector or diagonal matrix with weights for the columns (measures). If NULL, one is created or the plain SVD is used.}
   \item{hellinger}{a boolean. If FALSE (default), Chi-square distance will be used. If TRUE, Hellinger distance will be used.}
   \item{symmetric}{a boolean. If TRUE (default) symmetric factor scores for rows and columns are computed. If FALSE, the simplex (column-based) will be returned.}
+  \item{decomp.approach}{string. A switch for different decompositions (typically for speed). See \code{\link{pickSVD}}.}  
   \item{k}{number of components to return (this is not a rotation, just an \emph{a priori} selection of how much data should be returned).}  
 }
 \details{
@@ -39,6 +41,7 @@ All items with a letter followed by an \emph{i} are for the \emph{I} rows of a D
 \item{W}{a column-vector or diagonal matrix of weights (for the columns)}
 \item{X}{the final matrix that was decomposed (includes scaling, centering, masses, etc...).}
 \item{hellinger}{a boolean. TRUE if Hellinger distance was used.}
+\item{symmetric}{a boolean. FALSE if asymmetric factor scores should be computed.}
 }
 \references{
 Abdi, H., and Williams, L.J. (2010). Principal component analysis. \emph{Wiley Interdisciplinary Reviews: Computational Statistics}, 2, 433-459.\cr

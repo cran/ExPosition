@@ -7,7 +7,8 @@ epCA: Correspondence Analysis (CA) via ExPosition.
 Correspondence Analysis (CA) via ExPosition.
 }
 \usage{
-epCA(DATA, DESIGN = NULL, make_design_nominal = TRUE, masses = NULL, weights = NULL, hellinger = FALSE, symmetric = TRUE, graphs = TRUE, k = 0)
+epCA(DATA, DESIGN = NULL, make_design_nominal = TRUE, masses = NULL, weights = NULL,
+	hellinger = FALSE, symmetric = TRUE, graphs = TRUE, k = 0)
 }
 \arguments{
   \item{DATA}{original data to perform a CA on.}

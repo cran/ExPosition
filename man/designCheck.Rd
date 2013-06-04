@@ -26,10 +26,8 @@ Derek Beaton
 }
 
 \examples{
-	#this example is with the default iris set, not the iris set built into ExPosition
-	#however, this example shows how I made the iris set for use in ExPosition.
-	iris.design <- designCheck(iris[,c(1:4)],DESIGN=as.matrix(iris[,c('Species')]),make_design_nominal=TRUE)
+	data <- iris[,c(1:4)]
+	design <- as.matrix(iris[,c('Species')])
+	iris.design <- designCheck(data,DESIGN=design,make_design_nominal=TRUE)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ misc }

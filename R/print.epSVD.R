@@ -9,13 +9,14 @@ function (x,...) {
   cat ("The SVD was performed on ", nrow(res.epSVD$p),
        "individuals, described by", nrow(res.epSVD$q), "variables\n of rank", res.epSVD$ng)
   cat("\n*The results are available in the following objects:\n\n")
-  res <- array("", c(5, 2), list(1:5, c("name", "description")))
+  res <- array("", c(6, 2), list(1:6, c("name", "description")))
   
   res[1,] <- c("$p","Left singular vectors.")
   res[2,] <- c("$Dv","Singular values (in a vector).")
   res[3,] <- c("$Dd","Singular values (in diagonal matrix).")
   res[4,] <- c("$q", "Right singular vectors.")   
   res[5,] <- c("$ng", "Number of singular values (rank).")     
+  res[6,] <- c("$tau", "Explained variance per component.")    
   
   print(res)
 

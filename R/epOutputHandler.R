@@ -5,9 +5,10 @@ function(res=NULL,epPlotInfo=NULL){
 		final.output <- list(ExPosition.Data=res,Plotting.Data=epPlotInfo)
 		class(final.output) <- c("expoOutput","list")	
 		return(final.output)
-	}else if(!is.null(res) && is.null(epPlotInfo)){
-		return(res)
-	}else{
+	}#else if(!is.null(res) && is.null(epPlotInfo)){
+	#	return(res)
+	#}
+	else{
 		print("Unknown inputs. epOutputHandler must exit.")	
 		return(0)
 	}

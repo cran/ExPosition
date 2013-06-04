@@ -8,7 +8,8 @@ mca.eigen.fix
 A function for correcting the eigenvalues and output from multiple correspondence analysis (MCA, \code{\link{epMCA}})
 }
 \usage{
-mca.eigen.fix(DATA, mca.results, make_data_nominal = TRUE, numVariables = NULL, correction = c("b"), symmetric = FALSE)
+mca.eigen.fix(DATA, mca.results, make_data_nominal = TRUE, numVariables = NULL, 
+correction = c("b"), symmetric = FALSE)
 }
 \arguments{
   \item{DATA}{original data (i.e., not transformed into disjunctive coding)}
@@ -36,10 +37,12 @@ Greenacre, M. J. (2007). Correspondence Analysis in Practice. \emph{Chapman and 
 	data(mca.wine)
 	#No corrections used in MCA
 	mca.wine.res.uncor <- epMCA(mca.wine$data,correction=NULL)
-	#mca.eigen.fix with just Benzécri correction	
-	mca.wine.res.b <- mca.eigen.fix(mca.wine$data,mca.wine.res.uncor$ExPosition.Data,correction=c('b'))
-	#mca.eigen.fix with just Benzécri correction and Greenacre adjustment	
-	mca.wine.res.bg <- mca.eigen.fix(mca.wine$data,mca.wine.res.uncor$ExPosition.Data,correction=c('b','g'))
+	data <- mca.wine$data
+	expo.output <- mca.wine.res.uncor$ExPosition.Data
+	#mca.eigen.fix with just Benzécri correction		
+	mca.wine.res.b <- mca.eigen.fix(data, expo.output,correction=c('b'))
+	#mca.eigen.fix with Benzécri + Greenacre adjustment	
+	mca.wine.res.bg <- mca.eigen.fix(data,expo.output,correction=c('b','g'))
 }
 \keyword{ misc }
 \keyword{ multivariate }

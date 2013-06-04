@@ -5,7 +5,8 @@ function(DATA,make_data_nominal=TRUE,DESIGN=NULL,make_design_nominal=TRUE,masses
 	if(make_data_nominal){
 		nominalData <- makeNominalData(DATA)
 	}else{
-		nominalData <- DATA
+		
+		nominalData <- nominalCheck(DATA)
 	}
 	
 	DESIGN<-designCheck(DATA,DESIGN,make_design_nominal)
@@ -19,17 +20,10 @@ function(DATA,make_data_nominal=TRUE,DESIGN=NULL,make_design_nominal=TRUE,masses
 	if( weCanCorrect && (numUniqueRows==1) ){
 		res <- mca.eigen.fix(nominalData,res, make_data_nominal=FALSE,correction=correction,symmetric=symmetric)
 	}else{
-		#basically nothing
-		print('No corrections available.')
 		res$pdq.uncor <- res$pdq
 	}
 	class(res) <- c("epMCA","list")	
 	
-	epPlotInfo <- NULL	
-	#graphing handled here; also design
-	if(graphs){		
-		epPlotInfo <- epGraphHandler(res,nominalData,DESIGN,main)		
-	}
-
+	epPlotInfo <- epGraphs(res=res,DESIGN=DESIGN,main=main,graphs=graphs)
 	return(epOutputHandler(res=res,epPlotInfo=epPlotInfo))
 }

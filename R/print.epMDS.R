@@ -9,7 +9,7 @@ function (x,...) {
   cat ("The analysis was performed on a square matrix of", nrow(res.epMDS$fi),
        "items\n")
   cat("*The results are available in the following objects:\n\n")
-  res <- array("", c(9, 2), list(1:9, c("name", "description")))
+  res <- array("", c(10, 2), list(1:10, c("name", "description")))
   
   res[1,] <- c("$fi","Factor scores")
   res[2,] <- c("$di","Squared distances")
@@ -20,6 +20,7 @@ function (x,...) {
   res[7,] <- c("$pdq","SVD data")
   res[8,] <- c("$M","masses")  
   res[9,] <- c("$X","X matrix to decompose")    
+  res[10,] <- c("$D","D distance matrix")      
   
   print(res)
 

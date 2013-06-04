@@ -3,7 +3,7 @@ function(DATA,DESIGN=NULL,make_design_nominal=TRUE){
 
 	#DESIGN
 	if(is.null(DESIGN)){
-		print('DESIGN is null, creating default DESIGN matrix.')
+		#print('DESIGN is null, creating default DESIGN matrix.')
 		return(createDefaultDesign(DATA))
 	}else{
 		#check 1: is this a matrix or not? Make it one if not.
@@ -13,7 +13,7 @@ function(DATA,DESIGN=NULL,make_design_nominal=TRUE){
 		#check 2: do I need to nominalize the matrix? If true, do so.
 		if(make_design_nominal){
 			if(ncol(DESIGN)==1 && length(unique(DESIGN))>1 ){
-				print('Making a dummy-coded design matrix.')
+				#print('Making a dummy-coded design matrix.')
 				DESIGN <- makeNominalData(DESIGN)
 			}else{
 				print('DESIGN has too many columns or not enough elements. If the current DESIGN fails, a default will be created.')	
@@ -50,7 +50,7 @@ function(DATA,DESIGN=NULL,make_design_nominal=TRUE){
 		}
 		#just a final cleanliness check.
 		if(sum(rownames(DATA) %in% rownames(DESIGN))!=dim(DATA)[1]){
-			print("Rownames do not match. Setting rownames in Y to rownames of X")
+			#print("Rownames do not match. Setting rownames in Y to rownames of X")
 			rownames(DESIGN) <- rownames(DATA)
 		}			
 	}

@@ -8,19 +8,19 @@ function(results,x_axis=1,y_axis=2,constraints=NULL){
 			constraintsCheck <- computeConstraints(results,x_axis,y_axis)
 			if(constraintsCheck$minx < constraints$minx){
 				constraints$minx <- constraintsCheck$minx
-				print("minx constraint changed.")
+				#print("minx constraint changed.")
 			}
 			if(constraintsCheck$miny < constraints$miny){
 				constraints$miny <- constraintsCheck$miny
-				print("miny constraint changed.")				
+				#print("miny constraint changed.")				
 			}			
 			if(constraintsCheck$maxx > constraints$maxx){
 				constraints$maxx <- constraintsCheck$maxx
-				print("maxx constraint changed.")
+				#print("maxx constraint changed.")
 			}			
 			if(constraintsCheck$maxy > constraints$maxy){
 				constraints$maxy <- constraintsCheck$maxy
-				print("maxy constraint changed.")				
+				#print("maxy constraint changed.")				
 			}			
 			return(constraints)
 		}else{

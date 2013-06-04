@@ -1,6 +1,5 @@
 \name{epGraphs}
 \alias{epGraphs}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 epGraphs: ExPosition plotting function
 }
@@ -9,20 +8,31 @@ epGraphs: ExPosition plotting function
 }
 
 \usage{
-epGraphs(res, epPlotInfo = NULL, x_axis = 1, y_axis = 2, xlab = NULL, ylab = NULL, main = NULL, contributionPlots = TRUE, correlationPlotter = TRUE, biplots = FALSE)
+epGraphs(res, DESIGN=NULL, x_axis = 1, y_axis = 2, fi.col = NULL, fi.pch = NULL, 
+	fj.col = NULL, fj.pch = NULL, col.offset = NULL, constraints = NULL, 
+	xlab = NULL, ylab = NULL, main = NULL, 
+	contributionPlots = TRUE, correlationPlotter = TRUE, biplots = FALSE, 
+	graphs = TRUE)
 }
 
 \arguments{
-  \item{res}{results from ExPosition (i.e., $ExPosition.Data)}
-  \item{epPlotInfo}{results from epGraphs (i.e., $Plotting.Data)}
+  \item{res}{results from ExPosition}
+  \item{DESIGN}{A design matrix to apply colors (by pallete selection) to row items}
   \item{x_axis}{which component should be on the x axis?}
-  \item{y_axis}{which component should be on the y axis?}
+  \item{y_axis}{which component should be on the y axis?}  
+  \item{fi.col}{A matrix of colors for the row items. If NULL, colors will be selected.}
+  \item{fi.pch}{A matrix of pch values for the row items. If NULL, pch values are all 21.}  
+  \item{fj.col}{A matrix of colors for the column items. If NULL, colors will be selected.}
+  \item{fj.pch}{A matrix of pch values for the column items. If NULL, pch values are all 21.}    
+  \item{col.offset}{A numeric offset value. Is passed to \code{\link{createColorVectorsByDesign}}.}
+  \item{constraints}{Plot constraints as returned from \code{\link{prettyPlot}}. If NULL, constraints are selected.}      
   \item{xlab}{x axis label}
   \item{ylab}{y axis label}
   \item{main}{main label for the graph window}
   \item{contributionPlots}{a boolean. If TRUE (default), contribution bar plots will be created.}
   \item{correlationPlotter}{a boolean. If TRUE (default), a correlation circle plot will be created. Applies to PCA family of methods (CA is excluded for now).}
   \item{biplots}{a boolean. If FALSE (default), separate plots are made for row items ($fi) and column items ($fj). If TRUE, row ($fi) and column ($fj) items will be on the same plot.}
+ \item{graphs}{a boolean. If TRUE, graphs are created. If FALSE, only data associated to plotting (e.g., constraints, colors) are returned.}  
 }
 \details{
 epGraphs is an interface between \code{\link{ExPosition}} and \code{\link{prettyGraphs}}. 
@@ -30,7 +40,9 @@ epGraphs is an interface between \code{\link{ExPosition}} and \code{\link{pretty
 \value{
 	The following items are bundled inside of $Plotting.Data:\cr
 \item{$fi.col}{the colors that are associated to the row items ($fi).}
+\item{$fi.pch}{the pch values associated to the row items ($fi).}
 \item{$fj.col}{the colors that are associated to the column items ($fj).}
+\item{$fj.pch}{the pch values associated to the column items ($fj).}
 \item{$constraints}{axis constraints for the plots (determines end points of the plots).}
 }
 \author{
@@ -45,12 +57,8 @@ Derek Beaton
 	data(ep.iris)
 	pca.iris.res <- epPCA(ep.iris$data)
 	#this will put plotting data into a new variable.
-	pca.iris.plotting.data.2.and.3 <- epGraphs(pca.iris.res$ExPosition.Data,x_axis=2,y_axis=3)
-	#this will overwrite the data in pca.iris.res$Plotting.Data. Warnings will be provided as to what is overwritten.
-	pca.iris.res$Plotting.Data <- epGraphs(pca.iris.res$ExPosition.Data,epPlotInfo=pca.iris.res$Plotting.Data,x_axis=2,y_axis=3)	
+	epGraphs.2.and.3 <- epGraphs(pca.iris.res,x_axis=2,y_axis=3)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ multivariate }
 \keyword{ graphs }
 \keyword{ misc }
