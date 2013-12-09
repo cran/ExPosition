@@ -21,7 +21,8 @@ function(DATA,mca.results,make_data_nominal=TRUE,numVariables=NULL,correction=c(
 		}
 		eigvals <- new.pdq_results$Dv^2
 		new_eigs <- benzecri.eigenfix(eigvals,numVariables)
-		new.pdq_results$Dv <- new_eigs^(1/2)
+		#new.pdq_results$Dv <- new_eigs^(1/2)
+		new.pdq_results$Dv <- sqrt(new_eigs)
 		new.pdq_results$Dd <- diag(new.pdq_results$Dv)
 		new.pdq_results$ng <- length(new.pdq_results$Dv)
 		new.pdq_results$p <- new.pdq_results$p[,1:new.pdq_results$ng]

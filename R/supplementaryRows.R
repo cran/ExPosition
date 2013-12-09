@@ -28,19 +28,30 @@ supplementaryRows <- function(SUP.DATA,res){
 			stop(paste("res class type is unknown:",names(res),sep=" "))
 		}
 	}
-	
+		
 	if((class(res)[1] %in% c(pca.types))){
 		#some trickery happens here... if no res$W is available, it is passed as NULL.
 		sup.transform <- pcaSupplementaryRowsPreProcessing(SUP.DATA,center=res$center,scale=res$scale,W=res$W)
 		sup.proj <- supplementalProjection(sup.transform,res$fj,res$pdq$Dv)
-	}else if((class(res)[1] %in% c(ca.types))){
-		sup.transform <- caSupplementalElementsPreProcessing(SUP.DATA,hellinger=res$hellinger)
-		if((class(res)[1] %in% c('epMCA'))){ ##stupid corrections.
-			sup.proj <- supplementalProjection(sup.transform,res$fj,res$pdq$Dv,scale.factor=res$pdq$Dv/res$pdq.uncor$Dv[1:length(res$pdq$Dv)],symmetric=res$symmetric)
+	}
+	
+	 else if((class(res)[1] %in% c(ca.types))){
+		if(res$hellinger){
+			#sup.transform <- hellingerSupplementaryRowsPreProcessing(SUP.DATA,center=res$c)
+			sup.transform <- hellingerSupplementaryRowsPreProcessing(SUP.DATA,center=res$c)
+			sup.proj <- supplementalProjection(sup.transform,f.scores=res$fj,Dv=res$pdq$Dv,symmetric=res$symmetric)
 		}else{
-			sup.proj <- supplementalProjection(sup.transform,res$fj,res$pdq$Dv,symmetric=res$symmetric)
+			sup.transform <- caSupplementalElementsPreProcessing(SUP.DATA)
+			#else
+			if((class(res)[1] %in% c('epMCA'))){ ##stupid corrections.
+				sup.proj <- supplementalProjection(sup.transform,res$fj,res$pdq$Dv,scale.factor=res$pdq$Dv/res$pdq.uncor$Dv[1:length(res$pdq$Dv)],symmetric=res$symmetric)
+			}else{
+				sup.proj <- supplementalProjection(sup.transform,res$fj,res$pdq$Dv,symmetric=res$symmetric)
+			}
 		}
-	}else if((class(res)[1] %in% c(mds.types))){
+	}
+	
+	 else if((class(res)[1] %in% c(mds.types))){
 		sup.transform <- mdsSupplementalElementsPreProcessing(SUP.DATA,res$D,res$M)
 		sup.proj <- supplementalProjection(sup.transform,res$fi,res$pdq$Dv)
 	}else{

@@ -3,6 +3,7 @@ expo.scale <- function(DATA,center=TRUE,scale=TRUE){
 	column.names <- colnames(DATA)
 	DATA_dims <- dim(DATA)
 	
+	######THIS BLOCK INTENDED TO CREATE CENTERS AND SCALES BASED ON REQUESTS.
 	if(class(scale)=="character"){
 		if(tolower(scale)=="ss1"){ ##if you want to get SS1
 			if(is.logical(center) && center){
@@ -30,23 +31,25 @@ expo.scale <- function(DATA,center=TRUE,scale=TRUE){
 			scale<-TRUE #=apply(DATA, 2, sd, na.rm = TRUE)
 		}else{ ## you made a booboo
 			center<-TRUE
-			scale<-TRUE 				
+			scale<-TRUE 		
+			print("Something is wrong with 'center' and 'scale'. 'center' and 'scale' both set to TRUE.")					
 		}
 		##will include other normalization schemes in the future. The Mu-methods will need row norms and other norms.
 	}
 
-	#now do the centering and scaling.
-	if(is.logical(scale) && is.logical(center)){ ##let's you just do this with the logical flags
-		scale.info <- scale(DATA,center=center,scale=scale)	
-	}else if(class(center)=="numeric" && class(scale)=="numeric"){ ##takes in a numeric vector; a neat trick
-		if(length(center)==length(scale) && length(center)==DATA_dims[2]){
-			scale.info <- scale(DATA,center=center,scale=scale)
-		}else{
-			scale.info <- scale(DATA,center=TRUE,scale=TRUE) ## you made a booboo			
-		}
-	}else{
-		scale.info <- scale(DATA,center=TRUE,scale=TRUE) ## you made a booboo
+
+	######THIS BLOCK INTENDED TO PERFORM A SET OF CHECKS
+	if((!is.logical(center)) && (!(class(center)=="numeric" && length(center)==DATA_dims[2]))){
+		center <- TRUE
+		print("Something is wrong with 'center'. 'center' set to TRUE.")
 	}
+	if((!is.logical(scale)) && (!(class(scale)=="numeric" && length(scale)==DATA_dims[2]))){
+		scale <- TRUE
+		print("Something is wrong with 'scale'. 'scale' set to TRUE.")
+	}	
+
+	###NOW PERFORM THE ACTUAL NORMS.
+	scale.info <- scale(DATA,center=center,scale=scale)	
 		
 	#center checks
 	center.out <- attributes(scale.info)$`scaled:center`

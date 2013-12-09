@@ -7,11 +7,11 @@ Transform data for MDS analysis.
 Transform data for MDS analysis.
 }
 \usage{
-mdsTransform(D, MW)
+mdsTransform(D, masses)
 }
 \arguments{
   \item{D}{A distance matrix}
-  \item{MW}{A masses and weights list (see \code{computeMW}).}
+  \item{masses}{A vector or matrix of masses (see \code{computeMW}).}
 }
 \value{
 	\item{S}{a preprocessed matrix that can be decomposed.}

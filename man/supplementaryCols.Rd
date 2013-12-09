@@ -10,7 +10,7 @@ Computes factor scores for supplementary measures (columns).
 supplementaryCols(SUP.DATA, res, center = TRUE, scale = TRUE)
 }
 \arguments{
-\item{SUP.DATA}{a data matrix of supplementary observations (must have the same measures [columns] as active data)}
+\item{SUP.DATA}{a data matrix of supplementary measures (must have the same observations [rows] as active data)}
 \item{res}{ExPosition or TExPosition results}
   \item{center}{a boolean, string, or numeric. See \code{\link{expo.scale}}}
   \item{scale}{a boolean, string, or numeric. See \code{\link{expo.scale}}}

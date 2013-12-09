@@ -8,18 +8,19 @@ epGraphs: ExPosition plotting function
 }
 
 \usage{
-epGraphs(res, DESIGN=NULL, x_axis = 1, y_axis = 2, fi.col = NULL, fi.pch = NULL, 
-	fj.col = NULL, fj.pch = NULL, col.offset = NULL, constraints = NULL, 
-	xlab = NULL, ylab = NULL, main = NULL, 
+epGraphs(res, x_axis = 1, y_axis = 2, epPlotInfo = NULL, DESIGN=NULL, 
+	fi.col = NULL, fi.pch = NULL, fj.col = NULL, fj.pch = NULL, col.offset = NULL, 
+	constraints = NULL, xlab = NULL, ylab = NULL, main = NULL, 
 	contributionPlots = TRUE, correlationPlotter = TRUE, biplots = FALSE, 
 	graphs = TRUE)
 }
 
 \arguments{
   \item{res}{results from ExPosition}
-  \item{DESIGN}{A design matrix to apply colors (by pallete selection) to row items}
   \item{x_axis}{which component should be on the x axis?}
-  \item{y_axis}{which component should be on the y axis?}  
+  \item{y_axis}{which component should be on the y axis?}
+  \item{epPlotInfo}{A list (\code{$Plotting.Data}) from \code{epGraphs} or \code{ExPosition}.}    
+  \item{DESIGN}{A design matrix to apply colors (by pallete selection) to row items}
   \item{fi.col}{A matrix of colors for the row items. If NULL, colors will be selected.}
   \item{fi.pch}{A matrix of pch values for the row items. If NULL, pch values are all 21.}  
   \item{fj.col}{A matrix of colors for the column items. If NULL, colors will be selected.}

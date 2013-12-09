@@ -11,6 +11,7 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 		k <- m
 	}
 	
+	
 	flip <- FALSE	
 	if (I < J){
 		datain <- t(datain)
@@ -47,6 +48,11 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 		temp<-Q
 		Q<-P
 		P<-temp
+		rownames(Q) <- rownames(datain)
+		rownames(P) <- colnames(datain)		
+	}else{
+		rownames(P) <- rownames(datain)
+		rownames(Q) <- colnames(datain)			
 	}
 	
 	#this guarantees I take the rank as determined by the sings/eigs/"tau"

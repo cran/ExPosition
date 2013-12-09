@@ -9,7 +9,7 @@ function (x,...) {
   cat ("The analysis was performed on ", nrow(res.epCA$fi),
        "individuals, described by", nrow(res.epCA$fj), "variables\n")
   cat("*The results are available in the following objects:\n\n")
-  res <- array("", c(16, 2), list(1:16, c("name", "description")))
+  res <- array("", c(17, 2), list(1:17, c("name", "description")))
   
   res[1,] <- c("$fi","Factor scores of the rows")
   res[2,] <- c("$di","Squared distances of the rows")
@@ -23,10 +23,11 @@ function (x,...) {
   res[10,] <- c("$eigs","Eigenvalues")  
   res[11,] <- c("$M","masses")
   res[12,] <- c("$W","weights")
-  res[13,] <- c("$pdq","GSVD data")    
-  res[14,] <- c("$X","X matrix to decompose")    
-  res[15,] <- c("$hellinger","a boolean. TRUE if Hellinger distance was used.")        
-  res[16,] <- c("$symmetric","a boolean. TRUE if symmetric scores used for biplot.")          
+  res[13,] <- c("$c","center")  
+  res[14,] <- c("$pdq","GSVD data")    
+  res[15,] <- c("$X","X matrix to decompose")    
+  res[16,] <- c("$hellinger","a boolean. TRUE if Hellinger distance was used.")        
+  res[17,] <- c("$symmetric","a boolean. TRUE if symmetric scores used for biplot.")          
   
   print(res)
 

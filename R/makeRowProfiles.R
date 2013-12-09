@@ -7,9 +7,9 @@ function(X,weights=NULL,masses=NULL,hellinger=FALSE){
 	grandTotal <- sum(X)
 	
 	if(hellinger){
-		hellingerNorm(X,X_dimensions,colTotal,rowTotal,grandTotal,weights,masses)
+		return(hellingerNorm(X,X_dimensions,colTotal,rowTotal,grandTotal,weights,masses))
 	}else{
-		caNorm(X,X_dimensions,colTotal,rowTotal,grandTotal,weights,masses)
+		return(caNorm(X,X_dimensions,colTotal,rowTotal,grandTotal,weights,masses))
 	}
 
 }

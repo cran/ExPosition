@@ -39,6 +39,7 @@ All items with a letter followed by an \emph{i} are for the \emph{I} rows of a D
 \item{pdq}{the set of left singular vectors (pdq$p) for the rows, singular values (pdq$Dv and pdq$Dd), and the set of right singular vectors (pdq$q) for the columns.}
 \item{M}{a column-vector or diagonal matrix of masses (for the rows)}
 \item{W}{a column-vector or diagonal matrix of weights (for the columns)}
+\item{c}{a centering vector (for the columns).}
 \item{X}{the final matrix that was decomposed (includes scaling, centering, masses, etc...).}
 \item{hellinger}{a boolean. TRUE if Hellinger distance was used.}
 \item{symmetric}{a boolean. FALSE if asymmetric factor scores should be computed.}

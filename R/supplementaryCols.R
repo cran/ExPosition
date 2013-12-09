@@ -31,19 +31,32 @@ supplementaryCols <- function(SUP.DATA,res,center=TRUE,scale=TRUE){
 		#some trickery happens here... if no res$M is available, it is passed as NULL.
 		sup.transform <- pcaSupplementaryColsPreProcessing(SUP.DATA,center=center,scale=scale,M=res$M)
 		sup.proj <- supplementalProjection(sup.transform,res$fi,res$pdq$Dv)
-	}else if((class(res)[1] %in% c(ca.types))){
-		sup.transform <- caSupplementalElementsPreProcessing(t(SUP.DATA),hellinger=res$hellinger)
-		if(res$symmetric){
-			this.Dv <- res$pdq$Dv
-		}else{
-			this.Dv <- res$eigs
-		}		
-		if((class(res)[1] %in% c('epMCA'))){ ##stupid corrections.
-			sup.proj <- supplementalProjection(sup.transform,res$fi,this.Dv,scale.factor=res$pdq$Dv/res$pdq.uncor$Dv[1:length(res$pdq$Dv)])
-		}else{
-			sup.proj <- supplementalProjection(sup.transform,res$fi,this.Dv)
+	}
+	
+	 else if((class(res)[1] %in% c(ca.types))){
+	 	if(res$hellinger){
+	 		sup.transform <- hellingerSupplementaryColsPreProcessing(SUP.DATA)
+	 		if(res$symmetric){
+	 			sup.proj <- supplementalProjection(sup.transform,f.scores=res$fi,Dv=res$pdq$Dv)
+	 		}else{
+	 			sup.proj <- supplementalProjection(sup.transform,f.scores=res$pdq$p,Dv=res$pdq$Dv)
+	 		}	
+	 	}else{
+			sup.transform <- caSupplementalElementsPreProcessing(t(SUP.DATA))
+			if(res$symmetric){
+				this.Dv <- res$pdq$Dv
+			}else{
+				this.Dv <- res$eigs
+			}		
+			if((class(res)[1] %in% c('epMCA'))){ ##stupid corrections.
+				sup.proj <- supplementalProjection(sup.transform,res$fi,this.Dv,scale.factor=res$pdq$Dv/res$pdq.uncor$Dv[1:length(res$pdq$Dv)])
+			}else{
+				sup.proj <- supplementalProjection(sup.transform,res$fi,this.Dv)
+			}
 		}
-	}else if((class(res)[1] %in% c(mds.types))){ #this is the same as rows. 
+	}
+	
+	 else if((class(res)[1] %in% c(mds.types))){ #this is the same as rows. 
 		sup.transform <- mdsSupplementalElementsPreProcessing(SUP.DATA,res$D,res$M)
 		sup.proj <- supplementalProjection(sup.transform,res$fi,res$pdq$Dv)
 	}else{

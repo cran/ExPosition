@@ -10,7 +10,7 @@ function(DATA,scale=TRUE,center=TRUE,DESIGN=NULL,make_design_nominal=TRUE,masses
 	MW <- computeMW(DATA,masses=masses,weights=weights)
 
 	res <- corePCA(DATA,M=MW$M,W=MW$W,k=k)
-	res<-list(fi=res$fi,di=res$di,ci=res$ci,ri=res$ri,fj=res$fj,cj=res$cj,rj=res$rj,dj=res$dj,t=res$t,eigs=res$pdq$Dv^2,M=MW$M,W=MW$W,pdq=res$pdq,X=res$X)
+	#res<-list(fi=res$fi,di=res$di,ci=res$ci,ri=res$ri,fj=res$fj,cj=res$cj,rj=res$rj,dj=res$dj,t=res$t,eigs=res$pdq$Dv^2,M=MW$M,W=MW$W,pdq=res$pdq,X=res$X)
 	res$center <- this.center
 	res$scale <- this.scale	
 	class(res) <- c("epGPCA","list")
