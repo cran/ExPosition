@@ -25,10 +25,17 @@ function(datain){
             new_colnames <- cbind(new_colnames, paste(var_names[i], 
                 ".", unique_no_na[j], sep = ""))
         }
-        barycenter <- colSums(mini.mat)/sum(colSums(mini.mat))
-        fill_in <- repmat(t(as.matrix(barycenter)), length(which(rowSums(mini.mat) == 
-            0)), 1)
-        mini.mat[which(rowSums(mini.mat) == 0), ] <- fill_in
+        
+        if(length(which(rowSums(mini.mat) == 0)) > 0){
+	        barycenter <- colSums(mini.mat)/sum(colSums(mini.mat))
+        
+        	fill_in <- matrix(barycenter,
+        					length(which(rowSums(mini.mat) == 0)),
+            				length(barycenter),
+            				byrow=TRUE)	
+        	mini.mat[which(rowSums(mini.mat) == 0), ] <- fill_in
+        }
+        
         ender <- beginner + length(unique_no_na)
         dataout[, (beginner + 1):ender] <- mini.mat
         beginner <- ender

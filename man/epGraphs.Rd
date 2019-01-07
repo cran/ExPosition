@@ -11,7 +11,7 @@ epGraphs: ExPosition plotting function
 epGraphs(res, x_axis = 1, y_axis = 2, epPlotInfo = NULL, DESIGN=NULL, 
 	fi.col = NULL, fi.pch = NULL, fj.col = NULL, fj.pch = NULL, col.offset = NULL, 
 	constraints = NULL, xlab = NULL, ylab = NULL, main = NULL, 
-	contributionPlots = TRUE, correlationPlotter = TRUE, biplots = FALSE, 
+	contributionPlots = TRUE, correlationPlotter = TRUE,
 	graphs = TRUE)
 }
 
@@ -32,7 +32,6 @@ epGraphs(res, x_axis = 1, y_axis = 2, epPlotInfo = NULL, DESIGN=NULL,
   \item{main}{main label for the graph window}
   \item{contributionPlots}{a boolean. If TRUE (default), contribution bar plots will be created.}
   \item{correlationPlotter}{a boolean. If TRUE (default), a correlation circle plot will be created. Applies to PCA family of methods (CA is excluded for now).}
-  \item{biplots}{a boolean. If FALSE (default), separate plots are made for row items ($fi) and column items ($fj). If TRUE, row ($fi) and column ($fj) items will be on the same plot.}
  \item{graphs}{a boolean. If TRUE, graphs are created. If FALSE, only data associated to plotting (e.g., constraints, colors) are returned.}  
 }
 \details{

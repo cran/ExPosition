@@ -1,5 +1,5 @@
 epGraphs <-
-function(res,x_axis=1,y_axis=2,epPlotInfo=NULL,DESIGN=NULL,fi.col=NULL,fi.pch=NULL,fj.col=NULL,fj.pch=NULL,col.offset=NULL,constraints=NULL,xlab=NULL,ylab=NULL,main=NULL,contributionPlots=TRUE,correlationPlotter=TRUE,biplots=FALSE,graphs=TRUE){
+function(res,x_axis=1,y_axis=2,epPlotInfo=NULL,DESIGN=NULL,fi.col=NULL,fi.pch=NULL,fj.col=NULL,fj.pch=NULL,col.offset=NULL,constraints=NULL,xlab=NULL,ylab=NULL,main=NULL,contributionPlots=TRUE,correlationPlotter=TRUE,graphs=TRUE){
 
 	pca.types <- c('epPCA','epMDS','epGPCA')
 	ca.types <- c('epCA','epMCA')	
@@ -128,11 +128,7 @@ function(res,x_axis=1,y_axis=2,epPlotInfo=NULL,DESIGN=NULL,fi.col=NULL,fi.pch=NU
 	if(graphs){
 		fi.plot.info <- prettyPlot(res$fi,x_axis=x_axis,y_axis=y_axis,col=fi.col,axes=TRUE,xlab=xlab,ylab=ylab,main=main,constraints=constraints,pch=fi.pch,contributionCircles=TRUE,contributions=res$ci,dev.new=TRUE)
 		if(!(class(res)[1]=='epMDS')){
-			if(biplots){
-				fj.plot.info <- prettyPlot(res$fj,x_axis=x_axis,y_axis=y_axis,col=fj.col,axes=FALSE,contributionCircles=TRUE,contributions=res$cj,pch=fj.pch,dev.new=FALSE,new.plot=FALSE)
-			}else{
-				fj.plot.info <- prettyPlot(res$fj,x_axis=x_axis,y_axis=y_axis,col=fj.col,axes=TRUE,xlab=xlab,ylab=ylab,main=main,constraints=constraints,pch=fj.pch,contributionCircles=TRUE,contributions=res$cj,dev.new=TRUE)		
-			}	
+			fj.plot.info <- prettyPlot(res$fj,x_axis=x_axis,y_axis=y_axis,col=fj.col,axes=TRUE,xlab=xlab,ylab=ylab,main=main,constraints=constraints,pch=fj.pch,contributionCircles=TRUE,contributions=res$cj,dev.new=TRUE)		
 		}
 		if(contributionPlots){
 			contributionBars(res$fi,res$ci,x_axis=x_axis,y_axis=y_axis,main=main,col=fi.plot.info$col)

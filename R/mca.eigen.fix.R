@@ -1,5 +1,7 @@
 mca.eigen.fix <-
 function(DATA,mca.results,make_data_nominal=TRUE,numVariables=NULL,correction=c('b'),symmetric=FALSE){
+
+
 #can I make this more efficient?
 #with large data, especially with MCA, this stuff will get very large very fast.			
 	if('b' %in% correction){
@@ -28,37 +30,44 @@ function(DATA,mca.results,make_data_nominal=TRUE,numVariables=NULL,correction=c(
 		new.pdq_results$p <- new.pdq_results$p[,1:new.pdq_results$ng]
 		new.pdq_results$q <- new.pdq_results$q[,1:new.pdq_results$ng]
 			
-		if('g' %in% correction){
-			#print('Greenacre adjustment selected.')
-			taus <- greenacre.tau.adjust.benzecri(orig.pdq_results$Dv^2,numVariables,new.pdq_results$Dv^2,nrow(mca.results$fj))
-		}else{
-			taus <- (new.pdq_results$Dv^2/sum(new.pdq_results$Dv^2))*100
+		if(sum(dim(new.pdq_results$Dd)==0)){
+			print('Corrections have failed. Original information must be used.')
+			new.pdq_results <- orig.pdq_results
 		}
-				
-		fi <- new.pdq_results$p %*% new.pdq_results$Dd
+		taus <- (new.pdq_results$Dv^2/sum(new.pdq_results$Dv^2))*100
+		
+		if( (!sum(dim(new.pdq_results$Dd)==0)) && 'g' %in% correction){
+			taus <- greenacre.tau.adjust.benzecri(orig.pdq_results$Dv^2,numVariables,new.pdq_results$Dv^2,nrow(mca.results$fj))
+		}	
+		
+		
+		###ALL OF THIS SHOULD BE CHANGED. 		
+		fi <- new.pdq_results$p * matrix(new.pdq_results$Dv,nrow(new.pdq_results$p),ncol(new.pdq_results$p),byrow=TRUE)
 		rownames(fi) <- rownames(mca.results$fi)
 		di <- rowSums(fi^2)
-		ri <- repmat((1/di),1,new.pdq_results$ng) * (fi^2)
+		ri <- matrix(1/di,nrow(fi),ncol(fi)) * (fi^2)
 		ri <- replace(ri,is.nan(ri),0)	
-		ci <- repmat(masses,1,new.pdq_results$ng) * (fi^2)/repmat(t(new.pdq_results$Dv^2),nrow(mca.results$fi),1)
+		ci <- matrix(masses,nrow(fi),ncol(fi)) * (fi^2)/
+			matrix(new.pdq_results$Dv^2,nrow(fi),ncol(fi),byrow=TRUE)	
+		ci <- replace(ci,is.nan(ci),0)
 		di <- as.matrix(di)
 
-		#Columns, G
-		#fj <- W %*% new.pdq_results$q %*% new.pdq_results$Dd
-		fj <- repmat(weights,1,new.pdq_results$ng) * new.pdq_results$q %*% new.pdq_results$Dd
+
+		fj <- matrix(weights,nrow(new.pdq_results$q),ncol(new.pdq_results$q)) * new.pdq_results$q * 
+			matrix(new.pdq_results$Dv,nrow(new.pdq_results$q),ncol(new.pdq_results$q),byrow=TRUE)
 		rownames(fj) <- rownames(mca.results$fj)
-		cj <- repmat(rowCenter,1,new.pdq_results$ng) * (fj^2)/repmat(t(new.pdq_results$Dv^2),nrow(mca.results$fj),1)
+		cj <- matrix(1/weights,nrow(fj),ncol(fj)) * (fj^2) /
+			matrix(new.pdq_results$Dv^2,nrow(fj),ncol(fj),byrow=TRUE)	
+		cj <- replace(cj,is.nan(cj),0)
 		if(!symmetric){
-			#fj <- W %*% new.pdq_results$q
-			fj <- repmat(weights,1,new.pdq_results$ng) * new.pdq_results$q
-			rownames(fj) <- rownames(mca.results$fj)
+			fj <- fj * matrix(new.pdq_results$Dv^-1,nrow(new.pdq_results$q),ncol(new.pdq_results$q),byrow=TRUE)
 		}
 		dj <- rowSums(fj^2)
-		rj <- repmat((1/dj),1,new.pdq_results$ng) * (fj^2)
+		rj <- matrix(1/dj,nrow(fj),ncol(fj)) * (fj^2)
 		rj <- replace(rj,is.nan(rj),0)
-		dj <- as.matrix(dj)				
+		dj <- as.matrix(dj)			
 
-		#res <- list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=new.pdq_results$Dv^2,M=M,W=W,pdq=new.pdq_results,pdq.uncor= orig.pdq_results,X=mca.results$X,hellinger=mca.results$hellinger)
+		
 		res <- list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,eigs=new.pdq_results$Dv^2,M=masses,W=weights,pdq=new.pdq_results,pdq.uncor= orig.pdq_results,X=mca.results$X,hellinger=mca.results$hellinger,symmetric=mca.results$symmetric)
 		class(res) <- c("epMCA","list")
 		return(res)

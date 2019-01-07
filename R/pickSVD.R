@@ -6,11 +6,19 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 	J <- dataDims[2]
 	m <- min(I,J)
 
+
 	#check k
-	if(k < 1 || k > m){
+	k.is.percent <- FALSE
+	if(k > 0 && k < 1){
+		k.is.percent <- TRUE
+	}
+	if(!k.is.percent){
+		k <- ceiling(k)	
+	}
+	if(k <= 0 || k > m){
 		k <- m
 	}
-	
+
 	
 	flip <- FALSE	
 	if (I < J){
@@ -27,7 +35,7 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 	if(num.el > 1000000){
 		decomp.approach <- 'eigen'
 	}
-	
+
 	##for now, only eigen & svd.
 	if(tolower(decomp.approach)=='eigen'){
 		eigOut <- eigen(t(datain) %*% datain)	
@@ -36,14 +44,16 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 		P <- datain %*% Q %*% diag(d^-1)
 
 	}else{ ##the default method.
-		svd.out <- svd(datain,nu=k,nv=k)
+		if(k.is.percent){
+			svd.out <- svd(datain)
+		}else{ ##this just helps a bit with speed and memory and accurate tau.
+			svd.out <- svd(datain,nu=k,nv=k)
+		}
 		P <- svd.out$u
 		Q <- svd.out$v
-		d <- svd.out$d
+		d <- svd.out$d		
 	}
 	##but we hope to add faster methods soon, e.g., RcppArmadillo
-	
-	
 	if(flip){
 		temp<-Q
 		Q<-P
@@ -55,21 +65,39 @@ function(datain,is.mds=FALSE,decomp.approach='svd',k=0){
 		rownames(Q) <- colnames(datain)			
 	}
 	
-	#this guarantees I take the rank as determined by the sings/eigs/"tau"
-	P <- P[,1:min(length(d),ncol(P))]
-	Q <- Q[,1:min(length(d),ncol(Q))]
-		
-	#find precision limit, fix what comes back.
-	precisionLimit <- 2*.Machine$double.eps	
 	
+	#find precision limit, get rid of junk comps.
+	precisionLimit <- .Machine$double.eps	
 	if(is.mds){
-		indToKeep <- which(d > precisionLimit)	
-		tau <- d[indToKeep]/sum(d[indToKeep])	##value could be small due to error.
+		eigs <- d
 	}else{
-		indToKeep <- which(d^2 > precisionLimit)		
-		tau <- d[indToKeep]^2/sum(d[indToKeep]^2)	##value could be small due to error.
+		eigs <- d^2		
 	}
+	indToKeep <- which(eigs > precisionLimit)	
+	eigs <- eigs[indToKeep]	
+	tau <- eigs/sum(eigs)	##value could be small due to error.
 
-	indToKeep <- indToKeep[1:min(c(length(indToKeep),k))]	
-	return(list(u=P[,indToKeep],v=Q[,indToKeep],d=d[indToKeep],tau=tau*100))
+	viz.comps <- intersect(intersect(indToKeep,1:ncol(P)),intersect(indToKeep,1:ncol(Q)))
+
+	P <- as.matrix(P[,viz.comps])
+	Q <- as.matrix(Q[,viz.comps])
+	d <- d[viz.comps]
+	
+	if(k.is.percent){
+		k <- 1:min(which(cumsum(tau) > k))
+		P <- as.matrix(P[,k])
+		Q <- as.matrix(Q[,k])
+		d <- d[k]	
+	}
+	
+	no.dims <- (is.null(dim(P)) && is.null(dim(Q)))
+	dim.1 <- (ncol(P)==1 && ncol(Q)==1)
+	if( no.dims || dim.1 ){
+		P <- cbind(P,0)
+		Q <- cbind(Q,0)
+		d <- c(d,0)
+		warning('Solution has only 1 singular vector (or value). Zeros are appended for plotting purposes.')
+	}
+	
+	return(list(u=P,v=Q,d=d,tau=tau*100,eigs=eigs))
 }

@@ -2,7 +2,7 @@ acknowledgements <-
 function(){
 	print("This function serves to keep a list of those who have contributed to ExPosition (and related packages) throughout development.")
 	
-	num.people <- 11
+	num.people <- 12
 	
 	full.list <- array("", c(num.people, 1), list(1:num.people, c("Person")))
 	#rbind(

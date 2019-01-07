@@ -3,8 +3,7 @@ rowNorms <- function(X,type=NULL,center=FALSE,scale=FALSE){
 	if(is.null(type)){
 		return(X)
 	}else if(type=='hellinger'){
-		#return((X/repmat(rowSums(X),1,ncol(X)))^(1/2))
-		return( sqrt(X/repmat(rowSums(X),1,ncol(X))) )
+		return(sqrt(rowNorms(X,type="ca")))
 	}else if(type == 'ca'){
 		return(X/matrix(rowSums(X),nrow(X),ncol(X)))
 	}else if (type == 'z'){

@@ -3,6 +3,7 @@ expo.scale <- function(DATA,center=TRUE,scale=TRUE){
 	column.names <- colnames(DATA)
 	DATA_dims <- dim(DATA)
 	
+	
 	######THIS BLOCK INTENDED TO CREATE CENTERS AND SCALES BASED ON REQUESTS.
 	if(class(scale)=="character"){
 		if(tolower(scale)=="ss1"){ ##if you want to get SS1
@@ -46,7 +47,8 @@ expo.scale <- function(DATA,center=TRUE,scale=TRUE){
 	if((!is.logical(scale)) && (!(class(scale)=="numeric" && length(scale)==DATA_dims[2]))){
 		scale <- TRUE
 		print("Something is wrong with 'scale'. 'scale' set to TRUE.")
-	}	
+	}
+	
 
 	###NOW PERFORM THE ACTUAL NORMS.
 	scale.info <- scale(DATA,center=center,scale=scale)	
