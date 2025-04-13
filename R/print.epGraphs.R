@@ -1,5 +1,13 @@
-print.epGraphs <-
-function (x,...) {
+#' Print epGraphs results
+#' 
+#' @usage \method{print}{epGraphs}(x,\dots)
+#' @param x an list that contains items to make into the epGraphs class.
+#' @param \dots inherited/passed arguments for S3 print method(s).
+#' @author Derek Beaton and Cherise Chin-Fatt
+#' @seealso \code{\link{epGraphs}}
+#' @keywords print
+#' @export print.epGraphs
+print.epGraphs <- function (x,...) {
 	
   res.epGraphs <- x
   if (!inherits(res.epGraphs, "epGraphs")) stop ("no convenient data")

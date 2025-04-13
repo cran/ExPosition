@@ -1,29 +1,47 @@
 #this function works as a shortcut for users. It's a "recognition engine" to auto perform 1) correct preprocessing and 2) supplemental projection.
 
 #RE: PCA -- supplementary measures should always be center/scaled by active variable constraints
+
+
+#' Supplementary rows
+#' 
+#' Computes factor scores for supplementary observations (rows).
+#' 
+#' This function recognizes the class types of: \code{\link{epPCA}},
+#' \code{\link{epMDS}}, \code{\link{epCA}}, \code{\link{epMCA}} and
+#' \code{TExPosition} methods. Further, the function recognizes if Hellinger
+#' (as opposed to row profiles; in CA, MCA and DICA) were used.
+#' 
+#' @usage supplementaryRows(SUP.DATA, res)
+#' @param SUP.DATA a data matrix of supplementary observations (must have the
+#' same measures [columns] as active data)
+#' @param res ExPosition or TExPosition results
+#' @return A list of values containing:\cr \item{fii}{factor scores computed
+#' for supplemental observations} \item{dii}{squared distances for supplemental
+#' observations} \item{rii}{cosines for supplemental observations}
+#' @author Derek Beaton
+#' @keywords misc multivariate
+#' @export supplementaryRows
 supplementaryRows <- function(SUP.DATA,res){
 	SUP.DATA <- as.matrix(SUP.DATA)
 	
-	output.types <- c("expoOutput","texpoOutput","mexpoOutput")
-	data.types <- c("ExPosition.Data","TExPosition.Data","MExPosition.Data")
+	output.types <- c("expoOutput","texpoOutput")
+	data.types <- c("ExPosition.Data","TExPosition.Data")
 	mds.types <- c('epMDS')#can add DiSTATIS to this.
-	pca.types <- c('epPCA','epGPCA','tepBADA')
+	pca.types <- c('epPCA','tepBADA')
 	ca.types <- c('epCA','epMCA','tepDICA')	
 		
 		
 	#TEST THIS FURTHER... I SHOULD BE ABLE TO RECOGNZIE TEHSE...	
 	if(class(res)[1] %in% output.types){
 		indicator <- which(output.types %in% class(res)[1])
-		if(names(res) %in% data.types && length(names(res))==2){
+		if(any(names(res) %in% data.types) && length(names(res))==2){
 			if(output.types[indicator]=="expoOutput"){
 				res <- res$ExPosition.Data
 			}
 			if(output.types[indicator]=="texpoOutput"){
 				res <- res$TExPosition.Data
 			}
-			if(output.types[indicator]=="mexpoOutput"){
-				res <- res$MExPosition.Data
-			}						
 		}else{
 			stop(paste("res class type is unknown:",names(res),sep=" "))
 		}

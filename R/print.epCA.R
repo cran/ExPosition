@@ -1,5 +1,13 @@
-print.epCA <-
-function (x,...) {
+#' Print Correspondence Analysis (CA) results
+#' 
+#' 
+#' @usage \method{print}{epCA}(x,\dots)
+#' @param x an list that contains items to make into the epCA class.
+#' @param \dots inherited/passed arguments for S3 print method(s).
+#' @author Derek Beaton and Cherise Chin-Fatt
+#' @keywords print
+#' @export print.epCA
+print.epCA <- function (x,...) {
 
 #list(fi=fi,di=di,ci=ci,ri=ri,fj=fj,cj=cj,rj=rj,dj=dj,t=taus,M=M,W=W,pdq=pdqFIN)
 
@@ -27,7 +35,7 @@ function (x,...) {
   res[14,] <- c("$pdq","GSVD data")    
   res[15,] <- c("$X","X matrix to decompose")    
   res[16,] <- c("$hellinger","a boolean. TRUE if Hellinger distance was used.")        
-  res[17,] <- c("$symmetric","a boolean. TRUE if symmetric scores used for biplot.")          
+  res[17,] <- c("$symmetric","a boolean. TRUE if symmetric scores used.")          
   
   print(res)
 
